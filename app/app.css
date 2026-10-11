@@ -433,6 +433,20 @@ input[type="range"] {
   opacity: 0.2;
 }
 
+.gains rect.focus {
+  opacity: 0.65;
+}
+
+.area-label {
+  fill: var(--ink-2);
+  font-size: 12.5px;
+  font-weight: 600;
+  paint-order: stroke;
+  stroke: var(--paper);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
 .gains .demand,
 .curve-label .demand {
   fill: var(--demand);
@@ -582,7 +596,7 @@ input[type="range"] {
 
 .readouts {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .readouts > div {
@@ -601,7 +615,7 @@ input[type="range"] {
 }
 
 .readouts dd {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 6vw, 2rem);
   font-weight: 700;
   line-height: 1.15;
 }
@@ -612,31 +626,125 @@ input[type="range"] {
   line-height: 1.35;
 }
 
-.meter {
-  height: 0.5rem;
-  margin: 0.25rem 0 0.3rem;
+@media (max-width: 480px) {
+  .readouts > div {
+    padding: 0 0.6rem;
+  }
+}
+
+.gains-panel {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+}
+
+.gains-panel header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.1rem 1rem;
+}
+
+.gains-panel h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.gains-panel .total {
+  color: var(--ink-2);
+}
+
+.gains-panel .total strong {
+  color: var(--ink);
+  font-size: 1.5rem;
+}
+
+.gains-panel .total span {
+  margin-left: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.gains-panel .meaning {
+  max-width: 68ch;
+  margin-top: 0.3rem;
+  color: var(--ink-2);
+  font-size: 0.92rem;
+}
+
+.gains-bar {
+  display: flex;
+  gap: 2px;
+  height: 0.9rem;
+  margin-top: 0.8rem;
   border-radius: 4px;
-  background: var(--rule);
   overflow: hidden;
 }
 
-.meter span {
-  display: block;
-  height: 100%;
-  border-radius: 4px;
-  background: var(--ink);
-  transition: width 240ms ease;
+.gains-bar span {
+  min-width: 3px;
+  transition: flex-grow 240ms ease;
 }
 
-@media (max-width: 760px) {
-  .readouts {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: 1rem;
+.gains-bar .buyers,
+.swatch.demand {
+  background: var(--demand);
+}
+
+.gains-bar .sellers,
+.swatch.supply {
+  background: var(--supply);
+}
+
+.gains-bar .council,
+.swatch.council {
+  background: var(--ink-3);
+}
+
+.gains-bar .lost,
+.swatch.lost {
+  background: var(--rule-strong);
+  opacity: 0.55;
+}
+
+.gains-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.8rem 0;
+}
+
+.gains-list > div {
+  display: grid;
+  grid-template-columns: 6.2rem 5rem minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: 0.75rem;
+}
+
+.gains-list dt {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+}
+
+.gains-list dd {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.gains-list p {
+  color: var(--ink-2);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 560px) {
+  .gains-list > div {
+    grid-template-columns: 1fr auto;
   }
 
-  .readouts > div:nth-child(odd) {
-    padding-left: 0;
-    border-left: 0;
+  .gains-list p {
+    grid-column: 1 / -1;
   }
 }
 
