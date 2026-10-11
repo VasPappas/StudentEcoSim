@@ -170,8 +170,8 @@ export function MarketStage() {
             <p><strong>{agentTitle(selected)}.</strong> {describeAgent(selected, view)}</p>
           ) : (
             <p className="hint">
-              Every dot is one person. Filled dots traded, rings missed out, faint dots stayed away. Click one to ask
-              what they are doing.
+              Every dot is one person. Filled dots traded, rings missed out, faint dots stayed away. The shaded bar on
+              a trader is what they came out ahead by. Click a dot to ask that person what they are doing.
             </p>
           )}
         </div>
@@ -240,6 +240,11 @@ export function MarketStage() {
             <li>Every buyer has a private limit, the most they would pay. Every seller has one too, the least they would take.</li>
             <li>Everyone sees one going price. Whoever is happy with it turns up to trade.</li>
             <li>If one side outnumbers the other, lots are drawn for who gets to trade.</li>
+            <li>
+              A buyer who trades gains what the loaf is worth to them minus the price. A seller gains the price they
+              keep minus their cost. Added over everyone who traded, with any tax collected, these are the gains from
+              trade.
+            </li>
             <li>
               Overnight the price moves towards the crowded side, further the more lopsided the day was. Each time it
               overshoots, it moves half as boldly.

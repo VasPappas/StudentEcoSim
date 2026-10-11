@@ -126,6 +126,10 @@ export function Diagram({ view, textbook, tickMs, selected, onSelect }: DiagramP
   const focusPoint = focus ? point(focus) : null;
   const move = { transition: `transform ${Math.min(260, Math.round(tickMs * 0.8))}ms linear` };
 
+  // Room for a label inside each shaded area, measured at the left where the bars are tallest.
+  const buyersAreaHeight = y(price) - y(Math.min(view.values[0], TOP_PRICE));
+  const sellersAreaHeight = y(view.costs[0]) - y(sellerPrice);
+
   const lastSeller = view.costs.length - 1;
   const sellersLabelY = Math.max(margin.top + 12, y(Math.min(view.costs[lastSeller], TOP_PRICE)) - 10);
   const buyersLabelY = Math.max(margin.top + 12, y(Math.min(view.values[0], TOP_PRICE)) - 10);
@@ -181,13 +185,15 @@ export function Diagram({ view, textbook, tickMs, selected, onSelect }: DiagramP
             <g className="gains">
               {Array.from(view.buyerStatus, (status, i) =>
                 status === TRADED ? (
-                  <rect key={`b${i}`} className="demand" x={x(i) + 0.5} width={Math.max(0.5, slot - 1)}
+                  <rect key={`b${i}`} className={focus?.side === "buyer" && focus.index === i ? "demand focus" : "demand"}
+                    x={x(i) + 0.5} width={Math.max(0.5, slot - 1)}
                     y={y(view.values[i])} height={Math.max(0, y(price) - y(view.values[i]))} />
                 ) : null,
               )}
               {Array.from(view.sellerStatus, (status, j) =>
                 status === TRADED ? (
-                  <rect key={`s${j}`} className="supply" x={x(j) + 0.5} width={Math.max(0.5, slot - 1)}
+                  <rect key={`s${j}`} className={focus?.side === "seller" && focus.index === j ? "supply focus" : "supply"}
+                    x={x(j) + 0.5} width={Math.max(0.5, slot - 1)}
                     y={y(sellerPrice)} height={Math.max(0, y(view.costs[j]) - y(sellerPrice))} />
                 ) : null,
               )}
@@ -214,12 +220,12 @@ export function Diagram({ view, textbook, tickMs, selected, onSelect }: DiagramP
 
           <g className="price-line" style={{ transform: `translateY(${y(price)}px)`, ...move }}>
             <line x1={margin.left} x2={x(count)} y1={0} y2={0} />
-            <text x={x(count) - 6} y={-7} textAnchor="end" className="tag strong">{priceTag}</text>
+            <text x={x(count) - 6} y={controls.tax < 0 ? 16 : -7} textAnchor="end" className="tag strong">{priceTag}</text>
           </g>
           {controls.tax !== 0 && (
             <g className="price-line keep" style={{ transform: `translateY(${y(sellerPrice)}px)`, ...move }}>
               <line x1={margin.left} x2={x(count)} y1={0} y2={0} />
-              <text x={x(count) - 6} y={16} textAnchor="end" className="tag">sellers keep {euro(sellerPrice)}</text>
+              <text x={x(count) - 6} y={controls.tax < 0 ? -7 : 16} textAnchor="end" className="tag">sellers keep {euro(sellerPrice)}</text>
             </g>
           )}
 
@@ -248,6 +254,12 @@ export function Diagram({ view, textbook, tickMs, selected, onSelect }: DiagramP
         </g>
 
         <g className="tags">
+          {traded > 0 && buyersAreaHeight >= 22 && (
+            <text className="area-label" x={x(0) + 9} y={y(price) - buyersAreaHeight * 0.4}>buyers' gains</text>
+          )}
+          {traded > 0 && sellersAreaHeight >= 22 && (
+            <text className="area-label" x={x(0) + 9} y={y(sellerPrice) + sellersAreaHeight * 0.4 + 9}>sellers' gains</text>
+          )}
           {gapTo > gapFrom && (
             <text x={Math.max(margin.left + 50, gapCentre)} y={gapCollides ? y(price) + 16 : y(price) - 7}
               textAnchor="middle" className="tag strong">{gapLabel}</text>

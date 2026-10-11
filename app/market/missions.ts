@@ -148,7 +148,9 @@ export const missions: Mission[] = [
     lesson: (_before, after) =>
       "A price that is too low leaves buyers competing for too few loaves, and that pulls the price up. " +
       "It stops at the one price where as many people want to buy as want to sell. " +
-      `Your textbook calls that the equilibrium: here ${euro(after.price)} and ${after.traded} loaves.`,
+      `Your textbook calls that the equilibrium: here ${euro(after.price)} and ${after.traded} loaves. ` +
+      "Everyone who traded came out ahead, and added together that comes to " +
+      `${euroTotal(after.totalGains)} a day: the gains from trade, shown as the shaded bars.`,
   },
   {
     id: "festival",
